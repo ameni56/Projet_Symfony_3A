@@ -11,18 +11,16 @@ use App\Entity\Author;
 
 #[Route('/author')]
 class AuthorController extends AbstractController
-{//Cette ligne déclare une propriété privée $authorRepository, qui sera utilisée dans toute la classe pour interagir avec la base de données via le repository.
-
+{
     // Propriété de la classe pour stocker l'instance de AuthorRepository
-    private $authorRepo; // Nouveau nom pour la propriété
+    private $authorRepo; 
 
 
     // Constructeur qui prend une instance de AuthorRepository
-    //Le constructeur de la classe reçoit une instance de AuthorRepository. Cela permet d'injecter automatiquement le service repository via l'injection de dépendance. Il est ensuite assigné à la propriété $authorRepository pour être utilisé dans les autres méthodes.
     public function __construct(AuthorRepository $authorRepositoryParam)
     {
         // Assignation de l'instance à la propriété
-        $this->authorRepo = $authorRepositoryParam; // Nouveau nom pour l'argument
+        $this->authorRepo = $authorRepositoryParam; 
       
     }
 
@@ -44,7 +42,7 @@ class AuthorController extends AbstractController
     public function AuthorList(): Response
     {
         // Récupérer la liste des auteurs
-        $authors = $this->authorRepo->findAllAuthors(); // Utilisation de la nouvelle propriété
+        $authors = $this->authorRepo->findAllAuthors(); 
 
         // Rendre la vue avec la liste des auteurs
         return $this->render('author/authorList.html.twig', [
@@ -56,7 +54,7 @@ class AuthorController extends AbstractController
     public function authorDetails(int $id): Response
     {
         // Récupérer l'auteur en fonction de l'ID en utilisant le repository
-        $author = $this->authorRepo->findAuthorById($id); // Utilisation de la nouvelle propriété
+        $author = $this->authorRepo->findAuthorById($id); 
 
         // Rendre la vue avec les détails de l'auteur
         return $this->render('author/details.html.twig', [
