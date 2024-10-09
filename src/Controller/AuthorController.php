@@ -13,16 +13,18 @@ use App\Entity\Author;
 class AuthorController extends AbstractController
 {
     // Propriété de la classe pour stocker l'instance de AuthorRepository
-    private $authorRepo; 
+    private $authorRepo;
+    private $entityManager;
+
 
 
     // Constructeur qui prend une instance de AuthorRepository
-    public function __construct(AuthorRepository $authorRepositoryParam)
+    public function __construct(AuthorRepository $authorRepositoryParam,EntityManagerInterface $entityManagerParam)
     {
         // Assignation de l'instance à la propriété
         $this->authorRepo = $authorRepositoryParam; 
-      
-    }
+        $this->entityManager=$entityManagerParam;
+}
 
     #[Route('/author', name: 'app_author', methods:['GET'])]
     public function index(): Response
@@ -62,5 +64,27 @@ class AuthorController extends AbstractController
         ]);
     }
 
-   
+    #[Route('/addAuthor', name: 'add_author', methods: ['GET'])]
+   public function addAuthor():Response{
+    $author=new Author();
+    $author->setUsername('Ali');
+    $author->setEmail('Ali@esprit.tn');
+    $author->setPicture('sdkhbk.png');
+    $author->setNb_Books(500);
+
+    $this->entityManager->persist($author);
+    $this->entityManager->flush();
+
+    return $this->redirectToRoute('app_authorList');
+
+   }
+
+   #[Route('/delete/{id}', name: 'delete', methods: ['GET','DELETE'])]
+   public function delete_Author($id):Response{
+
+    $author=$this->authorRepo->findAuthorById($id);
+    $this->entityManager->remove($author);
+    $this->entityManager->flush();
+    return $this->redirectToRoute('app_authorList');
+   }
 }
