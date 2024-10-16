@@ -15,6 +15,8 @@ class AuthorController extends AbstractController
     // Propriété de la classe pour stocker l'instance de AuthorRepository
     private $authorRepo;
     private $entityManager;
+    
+   
 
 
 
@@ -24,6 +26,9 @@ class AuthorController extends AbstractController
         // Assignation de l'instance à la propriété
         $this->authorRepo = $authorRepositoryParam; 
         $this->entityManager=$entityManagerParam;
+       
+
+     
 }
 
     #[Route('/author', name: 'app_author', methods:['GET'])]
@@ -64,27 +69,40 @@ class AuthorController extends AbstractController
         ]);
     }
 
-    #[Route('/addAuthor', name: 'add_author', methods: ['GET'])]
-   public function addAuthor():Response{
-    $author=new Author();
-    $author->setUsername('Ali');
-    $author->setEmail('Ali@esprit.tn');
-    $author->setPicture('sdkhbk.png');
-    $author->setNb_Books(500);
+    #[Route('/addAuthor', name: 'addAuthor', methods: ['GET'])]
+    public function addAuthor(): Response{
+         $author=new Author();
+        $author->setUsername('Mohamed');
+        $author->setEmail('Mohamed@esprit.tn');
+        $author->setPicture('Mohamed.png');
+        $author->setNb_Books(453);
+        $this->entityManager->persist($author);
+        $this->entityManager->flush();
 
-    $this->entityManager->persist($author);
-    $this->entityManager->flush();
+        return $this->redirectToRoute('app_authorList');
 
-    return $this->redirectToRoute('app_authorList');
+    }
 
-   }
+    #[Route('/deleteAuthor/{id}', name: 'deleteAuthor', methods: ['GET','DELETE'])]
+    public function deleteAuthor(Author $author):Response{
+        if($author){
+        // $author=$this->authorRepo->findAuthorById($id);
+        $this->entityManager->remove($author);
+        $this->entityManager->flush();
+        }
+        return $this->redirectToRoute('app_authorList');
 
-   #[Route('/delete/{id}', name: 'delete', methods: ['GET','DELETE'])]
-   public function delete_Author($id):Response{
+    }
 
-    $author=$this->authorRepo->findAuthorById($id);
-    $this->entityManager->remove($author);
-    $this->entityManager->flush();
-    return $this->redirectToRoute('app_authorList');
-   }
+    #[Route('/updateAuthor/{id}', name: 'updateAuthor')]
+    public function updateAuthor(Author $author):Response{
+        if($author){
+        // $author=$this->authorRepo->findAuthorById($id);
+        $author->setUsername("Bonjour");
+        $this->entityManager->flush();
+        }
+        return $this->redirectToRoute('app_authorList');
+
+    }
+
 }
