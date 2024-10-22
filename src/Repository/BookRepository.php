@@ -15,6 +15,31 @@ class BookRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Book::class);
     }
+//     public function findBooksBetweenDates(\DateTimeInterface $startDate, \DateTimeInterface $endDate): array
+// {
+//     return $this->createQueryBuilder('b')
+//         ->andWhere('b.publicationDate BETWEEN :startDate AND :endDate')
+//         ->setParameter('startDate', $startDate)
+//         ->setParameter('endDate', $endDate)
+//         ->orderBy('b.publicationDate', 'ASC') // Trier par date de publication
+//         ->getQuery()
+//         ->getResult();
+// }
+public function findBooksBetweenDates(\DateTimeInterface $startDate, \DateTimeInterface $endDate): array
+{
+    $dql = "SELECT b FROM App\Entity\Book b
+            WHERE b.publicationDate BETWEEN :startDate AND :endDate
+            ORDER BY b.publicationDate ASC";
+
+    return $this->getEntityManager()->createQuery($dql)
+        ->setParameter('startDate', $startDate)
+        ->setParameter('endDate', $endDate)
+        ->getResult();
+}
+
+
+
+
 
 //    /**
 //     * @return Book[] Returns an array of Book objects

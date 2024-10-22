@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\AuthorRepository;
+
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Book;
@@ -16,12 +16,12 @@ use App\Form\BookType;
 class BookController extends AbstractController
 {
 
-    private $authorRepo;
+
     private $bookRepo;
     private $entityManager;
-    public function __construct(AuthorRepository $authorRepoParam,BookRepository $bookRepoParam,EntityManagerInterface $entityManagerParam){
-        $this->bookRepo = $authorRepoParam;
-        $this->authorRepo = $bookRepoParam;
+    public function __construct(BookRepository $bookRepoParam,EntityManagerInterface $entityManagerParam){
+        $this->bookRepo = $bookRepoParam;
+        
         $this->entityManager = $entityManagerParam;
     }
 
@@ -29,7 +29,7 @@ class BookController extends AbstractController
     public function BookList(): Response
     {
         // Récupérer la liste des auteurs
-        $books = $this->authorRepo->findAll();
+        $books = $this->bookRepo->findAll();
          
 
         // Rendre la vue avec la liste des auteurs
